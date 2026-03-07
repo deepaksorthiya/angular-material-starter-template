@@ -30,9 +30,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
@@ -72,6 +70,17 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "baseHref": "/angular-material-starter-template/",
+            "repo": "https://github.com/deepaksorthiya/angular-material-starter-template.git",
+            "user": {
+              "name": "deepaksorthiya",
+              "email": "deepak.sorthiya@gmail.com"
+            }
+          }
         }
       }
     }
