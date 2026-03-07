@@ -1,0 +1,11 @@
+# add files you wish to ignore here
+dist/
+node_modules/
+schematics/ng-add/files
+public/
+coverage/
+.angular/
+
+# Ignore all YAML files:
+**/*.yaml
+**/*.yml
