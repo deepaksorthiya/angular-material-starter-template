@@ -11,8 +11,9 @@ A sample Angular material starter template.
 ```
 Node: 24+
 Package Manager: npm 11.6+
-Angular CLI: 21.2.1
-Angular: 21.2.0
+Angular CLI: 21.2.3
+Angular Core: 21.2.5
+Angular Material: 21.2.3
 ```
 
 ---
