@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AddressFormComponent } from './address-form/address-form.component';
-import { Btntest } from './btntest/btntest';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { SidenavResponsiveExample } from './sidenav/sidenav-responsive-example';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, DashboardComponent, Btntest, AddressFormComponent],
+  imports: [RouterOutlet, SidenavResponsiveExample],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
