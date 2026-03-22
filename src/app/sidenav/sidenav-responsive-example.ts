@@ -19,7 +19,6 @@ import { map, shareReplay } from 'rxjs/operators';
 })
 export class SidenavResponsiveExample implements OnDestroy {
   fillerNav = Array.from({ length: 50 }, (_, i) => `Navigation Item - ${i + 1}`);
-
   fillerContent = Array.from(
     { length: 50 },
     (_, i) =>
@@ -32,14 +31,23 @@ export class SidenavResponsiveExample implements OnDestroy {
 
   private breakpointObserver = inject(BreakpointObserver);
 
+  // Observe if the screen size matches that of a handset (mobile device) not using in code
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
     shareReplay(),
   );
 
+  isDarkMode = signal<boolean>(false);
+  // Observe color scheme of system and update the isDarkMode signal accordingly
+  $themeObserver = this.breakpointObserver
+    .observe('(prefers-color-scheme: dark)')
+    .subscribe((result) => {
+      console.log('prefers-color-scheme: dark matches :', result.matches);
+      this.isDarkMode.set(result.matches);
+    });
+
   private document = inject(DOCUMENT);
   private htmlElement = this.document.querySelector('html')!;
-  isDarkMode = signal<boolean>(false);
 
   toolbarColor: ThemePalette;
 
@@ -57,6 +65,7 @@ export class SidenavResponsiveExample implements OnDestroy {
     const media = inject(MediaMatcher);
 
     this._mobileQuery = media.matchMedia('(max-width: 600px)');
+    this.isDarkMode.set(media.matchMedia('(prefers-color-scheme: dark)').matches);
     this.isMobile.set(this._mobileQuery.matches);
     this._mobileQueryListener = () => this.isMobile.set(this._mobileQuery.matches);
     this._mobileQuery.addEventListener('change', this._mobileQueryListener);
@@ -75,6 +84,7 @@ export class SidenavResponsiveExample implements OnDestroy {
 
   ngOnDestroy(): void {
     this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    this.$themeObserver.unsubscribe();
   }
 }
 
