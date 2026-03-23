@@ -44,23 +44,41 @@ export class SidenavResponsiveExample implements OnDestroy {
       this.isMobile.set(isMobile);
     });
 
+  private readonly THEME_KEY = 'theme';
   protected readonly isDarkMode = signal<boolean>(false);
   // Observe color scheme of system and update the isDarkMode signal accordingly
   $themeObserver = this.breakpointObserver
     .observe('(prefers-color-scheme: dark)')
     .subscribe((result) => {
       console.log('(prefers-color-scheme: dark) :', result.matches);
-      this.isDarkMode.set(result.matches);
+      // get user prefer theme if already set
+      const theme = this.getInitialTheme();
+      if (theme === 'system') {
+        // if no theme set use system specific
+        this.isDarkMode.set(result.matches);
+      }
     });
 
   private document = inject(DOCUMENT);
-  private htmlElement = this.document.querySelector('html')!;
+  private htmlElement = this.document.documentElement;
 
   toolbarColor: ThemePalette;
 
   onThemeChange() {
-    this.htmlElement.classList.toggle('theme-dark');
     this.isDarkMode.update((isDark) => !isDark);
+    if (this.isDarkMode()) {
+      localStorage.setItem(this.THEME_KEY, 'dark');
+    } else {
+      localStorage.setItem(this.THEME_KEY, 'light');
+    }
+  }
+
+  private getInitialTheme() {
+    const theme = localStorage.getItem(this.THEME_KEY);
+    if (theme) {
+      return theme;
+    }
+    return 'system';
   }
 
   constructor() {
