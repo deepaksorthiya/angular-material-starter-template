@@ -1,4 +1,4 @@
-import { BreakpointObserver, Breakpoints, MediaMatcher } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { Component, DOCUMENT, effect, inject, OnDestroy, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 /** @title Responsive sidenav */
@@ -31,18 +30,26 @@ export class SidenavResponsiveExample implements OnDestroy {
 
   private breakpointObserver = inject(BreakpointObserver);
 
-  // Observe if the screen size matches that of a handset (mobile device) not using in code
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map((result) => result.matches),
-    shareReplay(),
-  );
+  // Observe if the screen size matches that of a handset (mobile device)
+  // for more info on breakpoints https://material.angular.io/cdk/layout/overview
+  protected readonly isMobile = signal(true);
+  handsetObserver$ = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map((result) => result.matches),
+      shareReplay(),
+    )
+    .subscribe((isMobile) => {
+      console.log('isMobile :', isMobile);
+      this.isMobile.set(isMobile);
+    });
 
-  isDarkMode = signal<boolean>(false);
+  protected readonly isDarkMode = signal<boolean>(false);
   // Observe color scheme of system and update the isDarkMode signal accordingly
   $themeObserver = this.breakpointObserver
     .observe('(prefers-color-scheme: dark)')
     .subscribe((result) => {
-      console.log('prefers-color-scheme: dark matches :', result.matches);
+      console.log('(prefers-color-scheme: dark) :', result.matches);
       this.isDarkMode.set(result.matches);
     });
 
@@ -56,21 +63,7 @@ export class SidenavResponsiveExample implements OnDestroy {
     this.isDarkMode.update((isDark) => !isDark);
   }
 
-  protected readonly isMobile = signal(true);
-
-  private readonly _mobileQuery: MediaQueryList;
-  private readonly _mobileQueryListener: () => void;
-
   constructor() {
-    const media = inject(MediaMatcher);
-
-    this._mobileQuery = media.matchMedia('(max-width: 600px)');
-    this.isDarkMode.set(media.matchMedia('(prefers-color-scheme: dark)').matches);
-    this.isMobile.set(this._mobileQuery.matches);
-    this._mobileQueryListener = () => this.isMobile.set(this._mobileQuery.matches);
-    this._mobileQuery.addEventListener('change', this._mobileQueryListener);
-    console.log('isHandset :', this.isHandset$);
-    // An effect runs automatically whenever the signal changes
     effect(() => {
       if (this.isDarkMode()) {
         this.htmlElement.classList.add('theme-dark');
@@ -83,11 +76,7 @@ export class SidenavResponsiveExample implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
     this.$themeObserver.unsubscribe();
+    this.handsetObserver$.unsubscribe();
   }
 }
-
-/**  Copyright 2026 Google LLC. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at https://angular.io/license */
