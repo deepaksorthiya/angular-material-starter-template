@@ -1,10 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { Component, DOCUMENT, effect, inject, OnDestroy, signal } from '@angular/core';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { map, shareReplay } from 'rxjs/operators';
@@ -14,7 +16,15 @@ import { map, shareReplay } from 'rxjs/operators';
   selector: 'sidenav-responsive-example',
   templateUrl: 'sidenav-responsive-example.html',
   styleUrls: ['sidenav-responsive-example.css'],
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule],
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    MatBadgeModule,
+    MatMenuModule,
+  ],
 })
 export class SidenavResponsiveExample implements OnDestroy {
   fillerNav = Array.from({ length: 50 }, (_, i) => `Navigation Item - ${i + 1}`);
