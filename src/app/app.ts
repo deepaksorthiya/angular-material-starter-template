@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidenavResponsiveExample } from './sidenav/sidenav-responsive-example';
+import { SidenavResponsive } from './sidenav/sidenav-responsive';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SidenavResponsiveExample],
+  imports: [RouterOutlet, SidenavResponsive],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

@@ -13,9 +13,9 @@ import { map, shareReplay } from 'rxjs/operators';
 
 /** @title Responsive sidenav */
 @Component({
-  selector: 'sidenav-responsive-example',
-  templateUrl: 'sidenav-responsive-example.html',
-  styleUrls: ['sidenav-responsive-example.css'],
+  selector: 'sidenav-responsive',
+  templateUrl: 'sidenav-responsive.html',
+  styleUrls: ['sidenav-responsive.scss'],
   imports: [
     MatToolbarModule,
     MatButtonModule,
@@ -26,37 +26,44 @@ import { map, shareReplay } from 'rxjs/operators';
     MatMenuModule,
   ],
 })
-export class SidenavResponsiveExample implements OnDestroy {
+export class SidenavResponsive implements OnDestroy {
   menus = [
     {
       title: 'Dashboard',
       icon: 'dashboard',
+      isSubMenu: false,
     },
     {
       title: 'Account',
       icon: 'account_circle',
+      isSubMenu: true,
     },
     {
       title: 'Profile',
       icon: 'person',
+      isSubMenu: false,
     },
     {
       title: 'Settings',
       icon: 'settings_account_box',
+      isSubMenu: false,
     },
     {
       title: 'Inbox',
       icon: 'mail',
+      isSubMenu: false,
     },
     {
       title: 'Notifications',
       icon: 'notifications',
+      isSubMenu: false,
     },
   ];
   fillerNav = Array.from({ length: 10 }, (_, i) => {
     return {
       title: `Navigation - ${i + 1}`,
       icon: 'menu',
+      isSubMenu: false,
     };
   });
   fillerContent = Array.from(

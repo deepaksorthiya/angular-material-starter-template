@@ -94,6 +94,11 @@
             @if (true) {
               <span matListItemTitle>{{ nav.title }}</span>
             }
+            @if (nav.isSubMenu) {
+              <div matListItemMeta>
+                <mat-icon>arrow_drop_down</mat-icon>
+              </div>
+            }
           </a>
         }
       </mat-nav-list>
