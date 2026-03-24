@@ -88,8 +88,13 @@
       fixedTopGap="56"
     >
       <mat-nav-list>
-        @for (nav of fillerNav; track nav) {
-          <a mat-list-item routerLink=".">{{ nav }}</a>
+        @for (nav of menus; track nav) {
+          <a mat-list-item routerLink="" routerLinkActive="" (click)="toggleSideMenu()">
+            <mat-icon matListItemIcon class="nav-icon">{{ nav.icon }}</mat-icon>
+            @if (true) {
+              <span matListItemTitle>{{ nav.title }}</span>
+            }
+          </a>
         }
       </mat-nav-list>
     </mat-sidenav>

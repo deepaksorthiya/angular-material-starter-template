@@ -1,13 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-import { Component, DOCUMENT, effect, inject, OnDestroy, signal } from '@angular/core';
+import { Component, DOCUMENT, effect, inject, OnDestroy, signal, ViewChild } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { ThemePalette } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -27,7 +27,38 @@ import { map, shareReplay } from 'rxjs/operators';
   ],
 })
 export class SidenavResponsiveExample implements OnDestroy {
-  fillerNav = Array.from({ length: 50 }, (_, i) => `Navigation Item - ${i + 1}`);
+  menus = [
+    {
+      title: 'Dashboard',
+      icon: 'dashboard',
+    },
+    {
+      title: 'Account',
+      icon: 'account_circle',
+    },
+    {
+      title: 'Profile',
+      icon: 'person',
+    },
+    {
+      title: 'Settings',
+      icon: 'settings_account_box',
+    },
+    {
+      title: 'Inbox',
+      icon: 'mail',
+    },
+    {
+      title: 'Notifications',
+      icon: 'notifications',
+    },
+  ];
+  fillerNav = Array.from({ length: 10 }, (_, i) => {
+    return {
+      title: `Navigation - ${i + 1}`,
+      icon: 'menu',
+    };
+  });
   fillerContent = Array.from(
     { length: 50 },
     (_, i) =>
@@ -39,6 +70,8 @@ export class SidenavResponsiveExample implements OnDestroy {
   );
 
   private breakpointObserver = inject(BreakpointObserver);
+  @ViewChild(MatSidenav)
+  snav!: MatSidenav;
 
   // Observe if the screen size matches that of a handset (mobile device)
   // for more info on breakpoints https://material.angular.io/cdk/layout/overview
@@ -91,7 +124,18 @@ export class SidenavResponsiveExample implements OnDestroy {
     return 'system';
   }
 
+  /**
+   * close side nav on mobile after clicking
+   * on link or route
+   */
+  toggleSideMenu() {
+    if (this.isMobile()) {
+      this.snav.toggle();
+    }
+  }
+
   constructor() {
+    this.menus = this.menus.concat(this.fillerNav);
     effect(() => {
       if (this.isDarkMode()) {
         this.htmlElement.classList.add('theme-dark');
