@@ -1,48 +1,79 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 
-// 1. Include the core Material styles
-@include mat.elevation-classes();
-@include mat.app-background();
+$primary: mat.$azure-palette;
 
-// 2. Define the M2 palettes (Indigo, Pink, and Red for warnings)
-$primary: mat.m2-define-palette(mat.$m2-indigo-palette, 500);
-$accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
-$warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-// 3. Define the light and dark M2 themes
-$light-theme: mat.m2-define-light-theme(
+$light-theme: mat.define-theme(
   (
     color: (
+      theme-type: light,
       primary: $primary,
-      accent: $accent,
-      warn: $warn,
+      use-system-variables: true,
     ),
-    typography: mat.m2-define-typography-config(),
-    density: 0,
+    typography: (
+      use-system-variables: true,
+    ),
+    density: (
+      scale: 0,
+    ),
   )
 );
 
-$dark-theme: mat.m2-define-dark-theme(
+$dark-theme: mat.define-theme(
   (
     color: (
+      theme-type: dark,
       primary: $primary,
-      accent: $accent,
-      warn: $warn,
+      use-system-variables: true,
     ),
-    typography: mat.m2-define-typography-config(),
-    density: 0,
+    typography: (
+      use-system-variables: true,
+    ),
+    density: (
+      scale: 0,
+    ),
   )
 );
 
-// 4. Apply the themes
+@include mat.core(); // include core mixin functions
+/**
+ generate
+ .mat-app-background {
+    background-color: var(--mat-app-background-color, var(--mat-sys-background, transparent));
+    color: var(--mat-app-text-color, var(--mat-sys-on-background, inherit));
+  }
+*/
+@include mat.app-background(); //
+// Apply the theme to the html element
 html {
+  // customize components here globally
+  //--mat-sidenav-container-width: 360px;
+  height: 100%;
   color-scheme: light;
-  // Apply the light theme by default (includes colors, typography, and density)
+
+  // This generates the base component styles and root CSS variables
+  @include mat.theme($light-theme);
+  // style all components with generated theme
   @include mat.all-component-themes($light-theme);
+  // expose colors vars from theme like --mat-sys-primary to css file
+  @include mat.system-level-colors($light-theme);
+  // expose typography vars from theme like headline to css file
+  @include mat.system-level-typography($light-theme);
+  // backward compatibility for m2 components property like color
+  // be carefull not work with all components like toolbar
+  @include mat.color-variants-backwards-compatibility($light-theme);
+  // backward compatibility for m2 components typography
+  @include mat.typography-hierarchy($light-theme, $back-compat: true);
+  // include utility css classes like mat-bg mat-text
+  @include mat.system-classes();
+  // Set the base background and text color to match the M3 theme
 }
 
 .theme-dark {
   color-scheme: dark;
   // Apply only the dark theme colors when the dark mode class is active
   @include mat.all-component-colors($dark-theme);
+  @include mat.system-level-colors($dark-theme);
+  @include mat.system-level-typography($dark-theme);
+  @include mat.color-variants-backwards-compatibility($dark-theme);
 }

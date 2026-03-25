@@ -59,7 +59,7 @@ export class SidenavResponsive implements OnDestroy {
       isSubMenu: false,
     },
   ];
-  fillerNav = Array.from({ length: 10 }, (_, i) => {
+  fillerNav = Array.from({ length: 15 }, (_, i) => {
     return {
       title: `Navigation - ${i + 1}`,
       icon: 'menu',
@@ -95,7 +95,7 @@ export class SidenavResponsive implements OnDestroy {
     });
 
   private readonly THEME_KEY = 'theme';
-  protected readonly isDarkMode = signal<boolean>(false);
+  protected readonly isDarkMode = signal<boolean>(this.getInitialTheme() === 'dark');
   // Observe color scheme of system and update the isDarkMode signal accordingly
   $themeObserver = this.breakpointObserver
     .observe('(prefers-color-scheme: dark)')

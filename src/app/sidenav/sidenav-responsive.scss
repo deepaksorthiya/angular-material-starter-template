@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 .example-container {
   display: flex;
   flex-direction: column;
@@ -19,10 +21,39 @@ h1.example-app-name {
   cursor: pointer;
 }
 
+/* Toolbar Override */
+.custom-toolbar {
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: var(--mat-sys-primary),
+      container-text-color: var(--mat-sys-on-primary),
+    )
+  );
+
+  .icon-toolbar {
+    @include mat.icon-overrides(
+      (
+        color: var(--mat-sys-on-primary),
+      )
+    );
+  }
+}
+
 .example-sidenav-container {
   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
      causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
   flex: 1;
+}
+
+.sidenav-custom-width-container {
+  // 1. override var in scope
+  --mat-sidenav-container-width: 240px;
+  // 2 . M3 style
+  //   @include mat.sidenav-overrides(
+  //   (
+  //     container-width: 240px,
+  //   )
+  // );
 }
 
 .example-is-mobile .example-sidenav-container {
@@ -36,6 +67,8 @@ h1.example-app-name {
 }
 
 .main-container {
+  // background-color: var(--mat-sys-surface-tint);
+  // color: var(--mat-sys-on-surface);
   padding-left: 16px;
 }
 
@@ -59,4 +92,29 @@ h1.example-app-name {
   @media (min-width: 900px) {
     display: none;
   }
+}
+
+section {
+  display: flex;
+  align-items: center;
+}
+
+.example-label {
+  font-size: 14px;
+  margin: 0 16px 0 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
