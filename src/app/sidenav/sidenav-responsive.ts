@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { map, shareReplay } from 'rxjs/operators';
+import { ButtonDemo } from '../button-demo/button-demo';
 
 /** @title Responsive sidenav */
 @Component({
@@ -24,6 +25,7 @@ import { map, shareReplay } from 'rxjs/operators';
     MatListModule,
     MatBadgeModule,
     MatMenuModule,
+    ButtonDemo,
   ],
 })
 export class SidenavResponsive implements OnDestroy {
